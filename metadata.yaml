@@ -1,3 +1,6 @@
 homepage: "https://www.addingwell.com"
 documentation: "https://github.com/addingwell/r-advertising-tag/blob/master/README.md"
 versions:
+  - sha: fe603588597068becd4cc66f3f7db406b8117445
+    changeNotes: Init R Advertising Tag
+
