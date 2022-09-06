@@ -18,4 +18,4 @@ Both of those parameters can be overwritten in the advanced parameters section.
 Please raise any issue on GitHub.
 
 ### Open Source
-Kwanko Tag Tag for GTM Server Side is developed and maintained by [Addingwell](https://www.addingwell.com/) under the Apache 2.0 license.
+R Advertising Tag for GTM Server Side is developed and maintained by [Addingwell](https://www.addingwell.com/) under the Apache 2.0 license.
