@@ -150,7 +150,7 @@ const PAGE_VIEW_EVENT = data.pageViewEvent;
 const PURCHASE_EVENT = data.purchaseEvent;
 
 
-function encodeUri(value) {
+function safeEncodeComponent(value) {
   value = value || '';
   return encodeUriComponent(value);
 }
@@ -193,12 +193,12 @@ switch (eventModel.event_name) {
     }
 
     const urlParams = [
-      'organization=' + data.organizationId,
-      'event=' + data.eventId,
-      'tduid=' + encodeUri(rAdvertisingCookie[0]),
+      'organization=' + safeEncodeComponent(data.organizationId),
+      'event=' + safeEncodeComponent(data.eventId),
+      'tduid=' + safeEncodeComponent(rAdvertisingCookie[0]),
       'currency=EUR',
-      'orderNumber=' + encodeUri(data.transactionId ? data.transactionId : eventModel.transaction_id),
-      'orderValue=' + encodeUri(data.purchaseAmount ? data.purchaseAmount : (eventModel.value - (eventModel.tax || 0)) - (eventModel.shipping || 0)),
+      'orderNumber=' + safeEncodeComponent(data.transactionId ? data.transactionId : eventModel.transaction_id),
+      'orderValue=' + safeEncodeComponent(data.purchaseAmount ? data.purchaseAmount : (eventModel.value - (eventModel.tax || 0)) - (eventModel.shipping || 0)),
     ];
 
     const urlParamsString = urlParams.filter((v) => v).join('&');
