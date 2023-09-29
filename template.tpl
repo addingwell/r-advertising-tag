@@ -48,6 +48,12 @@ ___TEMPLATE_PARAMETERS___
   },
   {
     "type": "TEXT",
+    "name": "merchantId",
+    "displayName": "Merchant Id (Facultatif)",
+    "simpleValueType": true
+  },
+  {
+    "type": "TEXT",
     "name": "eventId",
     "displayName": "Event Id",
     "simpleValueType": true,
@@ -87,6 +93,33 @@ ___TEMPLATE_PARAMETERS___
         "name": "purchaseAmount",
         "displayName": "Purchase amount (in EUR), without taxes and shipping",
         "simpleValueType": true
+      }
+    ]
+  },
+  {
+    "type": "GROUP",
+    "name": "customParameters",
+    "displayName": "Custom Parameters",
+    "groupStyle": "ZIPPY_CLOSED",
+    "subParams": [
+      {
+        "type": "SIMPLE_TABLE",
+        "name": "customParametersTable",
+        "displayName": "",
+        "simpleTableColumns": [
+          {
+            "defaultValue": "",
+            "displayName": "ref",
+            "name": "ref",
+            "type": "TEXT"
+          },
+          {
+            "defaultValue": "",
+            "displayName": "value",
+            "name": "value",
+            "type": "TEXT"
+          }
+        ]
       }
     ]
   },
@@ -149,8 +182,7 @@ const eventModel = getAllEventData();
 const PAGE_VIEW_EVENT = data.pageViewEvent;
 const PURCHASE_EVENT = data.purchaseEvent;
 
-
-function safeEncodeComponent(value) {
+function safeEncodeUriComponent(value) {
   value = value || '';
   return encodeUriComponent(value);
 }
@@ -193,14 +225,30 @@ switch (eventModel.event_name) {
     }
 
     const urlParams = [
-      'organization=' + safeEncodeComponent(data.organizationId),
-      'event=' + safeEncodeComponent(data.eventId),
-      'tduid=' + safeEncodeComponent(rAdvertisingCookie[0]),
+      'organization=' + safeEncodeUriComponent(data.organizationId),
+      'merchant_id=' + safeEncodeUriComponent(data.merchantId),
+      'event=' + safeEncodeUriComponent(data.eventId),
+      'tduid=' + safeEncodeUriComponent(rAdvertisingCookie[0]),
       'currency=EUR',
-      'orderNumber=' + safeEncodeComponent(data.transactionId ? data.transactionId : eventModel.transaction_id),
-      'orderValue=' + safeEncodeComponent(data.purchaseAmount ? data.purchaseAmount : (eventModel.value - (eventModel.tax || 0)) - (eventModel.shipping || 0)),
+      'orderNumber=' + safeEncodeUriComponent(data.transactionId ? data.transactionId : eventModel.transaction_id),
+      'orderValue=' + safeEncodeUriComponent(data.purchaseAmount ? data.purchaseAmount : (eventModel.value - (eventModel.tax || 0)) - (eventModel.shipping || 0)),
     ];
-
+  
+    const includedRef = [];
+    for (let key in data.customParametersTable) {
+      const row = data.customParametersTable[key];
+      if (includedRef.indexOf(row.ref) !== -1) {           
+        continue;
+      }
+      
+      if (row.value === undefined) {
+        continue;
+      }
+      
+      includedRef.push(row.ref);
+      urlParams.push(row.ref + '=' + safeEncodeUriComponent(row.value));
+    }
+    
     const urlParamsString = urlParams.filter((v) => v).join('&');
 
     if (data.clearCookie) {
@@ -399,4 +447,5 @@ scenarios: []
 ___NOTES___
 
 Created on 2/15/2022, 16:06:45
+
 
