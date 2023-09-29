@@ -1,9 +1,10 @@
 homepage: "https://www.addingwell.com"
 documentation: "https://github.com/addingwell/r-advertising-tag/blob/master/README.md"
 versions:
+  - sha: 184122e35b5797f568569db6ebf810cf14ff1a38
+    changeNotes: Add merchant Id and custom parameters
   - sha: 00a2a136ce8a2eb4db92f84b0b5b2a43f9dbc81e
     changeNotes: "Fix: Encode URI Component on all items"
-
   - sha: fe603588597068becd4cc66f3f7db406b8117445
     changeNotes: Init R Advertising Tag
 
